@@ -5,7 +5,8 @@ on:
   # push:
   #   branches: [ "devel" ]
 
-db_backup:
+jobs:
+  db_backup:
     name: Backup PostGIS database
     runs-on: ubuntu-latest
     environment: dev
