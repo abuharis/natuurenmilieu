@@ -2,8 +2,8 @@ name: PostGIS Database Backup
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [ "devel" ]
+  push:
+    branches: [ "devel" ]
 
 jobs:
   db_backup:
