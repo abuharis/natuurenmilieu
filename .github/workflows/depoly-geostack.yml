@@ -43,9 +43,10 @@ jobs:
       
       - name: Create SSL Mapping directory
         run: |
-            sudo mkdir -p /opt/ssl_certs
-            sudo chown -R deployer:deployer /opt/ssl_certs
-            sudo chmod 755 /opt/ssl_certs
+            sudo mkdir -p /opt/ssl/letsencrypt        # certs and renewal configs
+            sudo mkdir -p /opt/ssl/lib                # certbot state
+            sudo mkdir -p /opt/ssl/www/.well-known/acme-challenge
+            sudo chown -R $(whoami):$(whoami) /opt/ssl
 
       - name: GeoStack Playbook Executions
         run: ansible-playbook -i ansible/inventory/hosts ansible/site.yml

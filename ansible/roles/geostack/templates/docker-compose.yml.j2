@@ -54,12 +54,14 @@ services:
     image: certbot/certbot:latest
     container_name: certbot
     restart: unless-stopped
+    depends_on:
+      - nginx
     networks:
       - geonet
     volumes:
-      - /opt/ssl_certs:/etc/letsencrypt
-      - /var/lib/letsencrypt:/var/lib/letsencrypt
-      - certbot-www:/var/www/certbot
+      - /opt/ssl/letsencrypt:/etc/letsencrypt
+      - /opt/ssl/lib:/var/lib/letsencrypt
+      - /opt/ssl/www:/var/www/certbot
     command: >
       certonly --webroot
       --webroot-path=/var/www/certbot
@@ -76,12 +78,10 @@ services:
       - "443:443"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/nginx.conf:ro
-      - /opt/ssl_certs:/etc/letsencrypt:ro
-      - /var/lib/letsencrypt:/var/lib/letsencrypt:ro  
-      - certbot-www:/var/www/certbot  
+      - /opt/ssl/letsencrypt:/etc/letsencrypt:ro  # certs (read-only for nginx)
+      - /opt/ssl/www:/var/www/certbot   # challenge dir
     depends_on:
       - dataviewer
       - geoserver
-      - certbot
     networks:
       - geonet
