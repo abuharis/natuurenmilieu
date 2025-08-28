@@ -1,7 +1,9 @@
 name: Destroy Deployment
 
 on:
-  workflow_dispatch:  # Manually trigger from GitHub Actions
+  workflow_dispatch:  # Manually trigger from GitHub Actions, but only if the code is in the default (main/master) branch
+  push:
+    branches: [ "devel" ] 
 
 jobs:
   destroy:
