@@ -32,6 +32,7 @@ jobs:
             sudo rm -rf /opt/ssl/www/*
             sudo rm -rf /opt/ssl/letsencrypt/*
             sudo rm -rf /opt/db_backups/*
+            sudo rm -rf /op/* 
 
             echo "All services destroyed and volumes cleaned."
           EOF
