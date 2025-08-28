@@ -1,0 +1,14 @@
+---
+geostack_root: /opt/geostack
+geonet: geonet
+
+geoserver_image: kartoza/geoserver:latest
+postgis_image: postgis/postgis:16-3.4
+nginx_image: nginx:alpine
+
+geoserver_admin_user: admin
+geoserver_admin_password: changeme_admin
+
+postgres_user: geos
+postgres_password: changeme_pg
+postgres_db: geodata

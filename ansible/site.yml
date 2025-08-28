@@ -1,8 +1,12 @@
 ---
-- name: Apply base setup
+- name: Install Docker
   hosts: geostack
   become: true
   roles:
     - docker
-    # later: docker
-    # later: geostack
+
+- name: Deploy GeoStack
+  hosts: geostack
+  become: true
+  roles:
+    - geostack

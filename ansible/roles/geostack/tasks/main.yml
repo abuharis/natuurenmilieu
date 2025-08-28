@@ -1,0 +1,38 @@
+---
+- name: Ensure application folders exist
+  ansible.builtin.file:
+    path: "{{ geostack_root }}/{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - nginx
+    - geoserver_data
+    - postgis_data
+
+- name: Deploy docker-compose.yml
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ geostack_root }}/docker-compose.yml"
+    mode: "0644"
+
+- name: Deploy nginx.conf
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: "{{ geostack_root }}/nginx/default.conf"
+    mode: "0644"
+
+- name: Start geostack via docker compose
+  ansible.builtin.shell: docker compose up -d
+  args:
+    chdir: "{{ geostack_root }}"
+
+- name: Check running containers
+  ansible.builtin.command: docker ps --format "table {{'{{'}}.Names{{'}}'}}\\t{{'{{'}}.Status{{'}}'}}\\t{{'{{'}}.Ports{{'}}'}}"
+  register: docker_ps
+  changed_when: false
+
+- name: Show container table
+  ansible.builtin.debug:
+    msg: |
+      Containers running:
+      {{ docker_ps.stdout }}

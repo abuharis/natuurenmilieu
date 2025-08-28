@@ -1,0 +1,46 @@
+version: "3.9"
+services:
+  postgis:
+    image: {{ postgis_image }}
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: {{ postgres_db }}
+      POSTGRES_USER: {{ postgres_user }}
+      POSTGRES_PASSWORD: {{ postgres_password }}
+    volumes:
+      - ./postgis_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U {{ postgres_user }} -d {{ postgres_db }}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [{{ geonet }}]
+
+  geoserver:
+    image: {{ geoserver_image }}
+    restart: unless-stopped
+    depends_on:
+      postgis:
+        condition: service_healthy
+    environment:
+      GEOSERVER_ADMIN_USER: {{ geoserver_admin_user }}
+      GEOSERVER_ADMIN_PASSWORD: {{ geoserver_admin_password }}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./geoserver_data:/var/lib/geoserver
+    networks: [{{ geonet }}]
+
+  nginx:
+    image: {{ nginx_image }}
+    restart: unless-stopped
+    depends_on: [geoserver]
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks: [{{ geonet }}]
+
+networks:
+  {{ geonet }}:
+    driver: bridge

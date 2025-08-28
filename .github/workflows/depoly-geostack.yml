@@ -1,4 +1,4 @@
-name: Deploy GeoStack (Ping only)
+name: Deploy GeoStack
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
     branches: [ "devel" ]
 
 jobs:
-  ping:
+  deploy:
     runs-on: ubuntu-latest
     environment: dev
     env:
