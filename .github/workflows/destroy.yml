@@ -23,15 +23,15 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.DEPLOY_HOST }} << 'EOF'
             echo "Stopping and removing all containers..."
-            docker-compose -f /opt/your-compose-folder/docker-compose.yml down -v
+            docker compose -f /opt/your-compose-folder/docker-compose.yml down -v
 
             echo "Removing leftover volumes..."
             docker volume prune -f
 
             echo "Cleaning SSL, DB backups, and other persistent directories..."
-            rm -rf /opt/ssl/www/*
-            rm -rf /opt/ssl/letsencrypt/*
-            rm -rf /opt/db_backups/*
+            sudo rm -rf /opt/ssl/www/*
+            sudo rm -rf /opt/ssl/letsencrypt/*
+            sudo rm -rf /opt/db_backups/*
 
             echo "All services destroyed and volumes cleaned."
           EOF
