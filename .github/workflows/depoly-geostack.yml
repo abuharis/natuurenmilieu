@@ -42,4 +42,4 @@ jobs:
           cat ansible/inventory/hosts
 
       - name: Run ping playbook
-        run: ansible-playbook -i ansible/inventory/hosts ansible/plays/ping.yml
+        run: ansible-playbook -i ansible/inventory/hosts ansible/site.yml

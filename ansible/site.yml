@@ -1,0 +1,8 @@
+---
+- name: Apply base setup
+  hosts: geostack
+  become: true
+  roles:
+    - docker
+    # later: docker
+    # later: geostack
