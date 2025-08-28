@@ -2,8 +2,8 @@ name: Geoserver, nginx, certbot deployment
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ "devel" ]
+  # push:
+  #   branches: [ "devel" ]
 
 jobs:
   deploy:
