@@ -8,6 +8,7 @@ on:
 jobs:
   destroy:
     runs-on: ubuntu-latest
+    environment: dev
 
     steps:
       - name: Checkout repository
