@@ -65,16 +65,24 @@ services:
     entrypoint: >
       sh -c "trap exit TERM;
              while :; do
-               # Try to issue the cert if it doesn't exist yet
+               # Check if cert exists, if not issue it non-interactively
                certbot certonly --webroot -w /var/www/certbot \
-                 -d wok.water-op-de-kaa.src.surf-hosted.nl -d www.wok.water-op-de-kaa.src.surf-hosted.nl \
-                 --agree-tos --no-eff-email || true;
-               
-               # Renew any existing certificates
-               certbot renew --webroot -w /var/www/certbot --quiet --deploy-hook 'nginx -s reload';
-               
-               # Sleep 12 hours before next renewal check
-               sleep 12h;
+                 -d yourdomain.com -d www.yourdomain.com \
+                 --email you@example.com \
+                 --agree-tos \
+                 --non-interactive \
+                 --no-eff-email || true;
+
+               # Renew certificates that expire in 5 days or less
+               certbot renew --webroot -w /var/www/certbot \
+                 --quiet \
+                 --deploy-hook 'nginx -s reload' \
+                 --renew-by-default \
+                 --pre-hook 'echo Renewal check started' \
+                 --post-hook 'echo Renewal done';
+
+               # Sleep 24 hours before next check
+               sleep 24h;
              done"
 
   nginx:
