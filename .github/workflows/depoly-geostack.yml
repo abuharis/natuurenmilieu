@@ -2,8 +2,8 @@ name: Deploy GeoStack
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ "devel" ]
+  # push:
+  #   branches: [ "devel" ]
 
 jobs:
   deploy:
@@ -43,31 +43,3 @@ jobs:
 
       - name: GeoStack Playbook Executions
         run: ansible-playbook -i ansible/inventory/hosts ansible/site.yml
-  db_backup:
-    name: Backup PostGIS database
-    runs-on: ubuntu-latest
-    environment: dev
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.7.0
-        with:
-          ssh-private-key: ${{ secrets.PRIVATE_KEY }}
-
-      - name: Run pg_dump inside PostGIS container
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.DEPLOY_HOST }} "
-            mkdir -p /opt/db_backups &&
-            docker exec postgis pg_dump \
-              -U ${{ secrets.DB_USER }} \
-              -d ${{ secrets.DB_NAME }} \
-              > /opt/db_backups/postgis_backup_\$(date +%F_%H-%M-%S).sql
-          "
-
-      - name: Verify backup file on server
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.DEPLOY_HOST }} \
-            'ls -lh /opt/db_backups/postgis_backup_*.sql | tail -n 1'
