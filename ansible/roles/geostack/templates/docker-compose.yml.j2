@@ -4,6 +4,9 @@ networks:
   geonet:
     driver: bridge
 
+volumes:
+  certbot-www:
+
 services:
   dataviewer:
     image: dataviewer:latest
@@ -47,6 +50,23 @@ services:
       retries: 10
     networks: [{{ geonet }}]
 
+  certbot:
+    image: certbot/certbot:latest
+    container_name: certbot
+    restart: unless-stopped
+    networks:
+      - geonet
+    volumes:
+      - /opt/ssl_certs:/etc/letsencrypt
+      - /var/lib/letsencrypt:/var/lib/letsencrypt
+      - certbot-www:/var/www/certbot
+    command: >
+      certonly --webroot
+      --webroot-path=/var/www/certbot
+      --agree-tos
+      --no-eff-email
+      -d wok.water-op-de-kaa.src.surf-hosted.nl
+
   nginx:
     image: {{ nginx_image }}
     container_name: nginx
@@ -56,8 +76,12 @@ services:
       - "443:443"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/nginx.conf:ro
+      - /opt/ssl_certs:/etc/letsencrypt:ro
+      - /var/lib/letsencrypt:/var/lib/letsencrypt:ro  
+      - certbot-www:/var/www/certbot  
     depends_on:
       - dataviewer
       - geoserver
+      - certbot
     networks:
       - geonet

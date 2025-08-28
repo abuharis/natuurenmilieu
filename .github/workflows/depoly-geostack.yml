@@ -40,6 +40,12 @@ jobs:
           ${DEPLOY_HOST} ansible_user=${{ secrets.SSH_USERNAME }} ansible_ssh_private_key_file=~/.ssh/id_ed25519
           EOF
           cat ansible/inventory/hosts
+      
+      - name: Create SSL Mapping directory
+        run: |
+            sudo mkdir -p /opt/ssl_certs
+            sudo chown -R deployer:deployer /opt/ssl_certs
+            sudo chmod 755 /opt/ssl_certs
 
       - name: GeoStack Playbook Executions
         run: ansible-playbook -i ansible/inventory/hosts ansible/site.yml

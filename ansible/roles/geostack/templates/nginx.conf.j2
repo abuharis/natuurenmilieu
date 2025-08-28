@@ -1,40 +1,59 @@
 server {
-  listen 80 default_server;
-  server_name wok.water-op-de-kaa.src.surf-hosted.nl;
+    listen 80;
+    server_name wok.water-op-de-kaa.src.surf-hosted.nl;
 
-# Proxy requests for GeoServer
-location /geoserver {
-    proxy_pass http://geoserver:8080/geoserver;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
+    # Redirect all traffic to HTTPS except for certbot challenge
+    location / {
+        return 301 https://$server_name$request_uri;
+    }
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
 }
 
-# Handle requests for dataviewer at /
-location / {
-    proxy_pass http://dataviewer:8090/;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
 
-    add_header x-cache-status $upstream_cache_status;
-    add_header cache-control "public, max-age=18000";
+server {
+    listen 443 ssl;
+    server_name wok.water-op-de-kaa.src.surf-hosted.nl;
 
-    # enable caching
-    #proxy_cache my_cache;
-    proxy_cache_valid 200 1h;
-    proxy_cache_bypass $http_cache_control;
-}
+    ssl_certificate /etc/letsencrypt/live/wok.water-op-de-kaa.src.surf-hosted.nl/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/wok.water-op-de-kaa.src.surf-hosted.nl/privkey.pem;
 
-# LetsEncrypt ACME challenge
-location /.well-known/acme-challenge/ {
-    root /var/www/certbot;
-}
 
-location /healthz {
-    return 200 'ok';
-    add_header Content-Type text/plain;
-  }
+    # Proxy requests for GeoServer
+    location /geoserver {
+        proxy_pass http://geoserver:8080/geoserver;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Handle requests for dataviewer at /
+    location / {
+        proxy_pass http://dataviewer:8090/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        add_header x-cache-status $upstream_cache_status;
+        add_header cache-control "public, max-age=18000";
+
+        # enable caching
+        #proxy_cache my_cache;
+        proxy_cache_valid 200 1h;
+        proxy_cache_bypass $http_cache_control;
+    }
+
+    # LetsEncrypt ACME challenge
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location /healthz {
+        return 200 'ok';
+        add_header Content-Type text/plain;
+    }
 }
