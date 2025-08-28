@@ -5,6 +5,12 @@
   roles:
     - docker
 
+- name: Handle Dataviewer
+  hosts: geostack
+  become: true
+  roles:
+    - dataviewer
+
 - name: Deploy GeoStack
   hosts: geostack
   become: true
