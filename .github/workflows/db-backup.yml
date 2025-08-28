@@ -23,7 +23,7 @@ jobs:
       - name: Run pg_dump inside PostGIS container
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.DEPLOY_HOST }} "
-            sudo mkdir -p /opt/db_backups &&
+            sudo mkdir -p /opt/db_backups && sudo chown -R ${{ secrets.SSH_USERNAME }} /opt/db_backups && \
             docker exec postgis pg_dump \
               -U ${{ secrets.DB_USER }} \
               -d ${{ secrets.DB_NAME }} \
