@@ -1,0 +1,34 @@
+---
+- name: Ensure dataviewer build context exists
+  ansible.builtin.file:
+    path: /opt/dataviewer
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Copy dataviewer source files
+  ansible.builtin.copy:
+    src: "dataviewer-src/"
+    dest: "/opt/dataviewer/dataviewer-src/"
+  become: true
+
+- name: Copy nginx.conf
+  ansible.builtin.copy:
+    src: "nginx.conf"
+    dest: "/opt/dataviewer/nginx.conf"
+  become: true
+
+- name: Deploy Dockerfile
+  ansible.builtin.template:
+    src: "Dockerfile.j2"
+    dest: "/opt/dataviewer/Dockerfile"
+  become: true
+
+- name: Build dataviewer Docker image
+  community.docker.docker_image:
+    name: "dataviewer"
+    tag: latest
+    build:
+      path: "/opt/dataviewer"
+    source: build
+  become: true

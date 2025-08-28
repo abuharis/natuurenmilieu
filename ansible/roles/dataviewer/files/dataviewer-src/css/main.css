@@ -1,0 +1,89 @@
+.map {
+    height: 100%;
+    width: 100%;
+}
+
+.download-buttons {
+    position: fixed;
+    bottom: 20;
+    left: 15;
+    z-index: 1000;
+}
+
+.download-button {
+    background: white;
+    margin: 2px;
+    font-size: 14px;
+    padding: 8px 15px;
+    text-align: center;
+    border: 1px solid #838383;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.download-button a {
+    text-decoration: none;
+    color: rgba(8, 34, 53, 1);
+
+}
+
+.download-button:hover {
+    background: rgba(239, 243, 244, 1);
+
+}
+
+.hide {
+    display: none;
+}
+
+.big-pop-up {
+    background: rgba(239, 243, 244, 1);
+    border: none;
+    border-radius: 5px;
+    font-family: Open Sans;
+    font-size: 14px;
+    margin: auto; 
+    padding: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* width: 600px; */
+}
+
+.big-pop-up-title {
+    border-bottom: solid 1px rgba(220, 220, 220, 1);
+    padding-bottom: 10px;
+}
+
+.big-pop-up-content {
+    align-items: center;
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+    width: 100%;
+}
+
+.big-pop-up-left {
+    background: linear-gradient(90deg, #2F5B88 1.94%, #558D9F 98.06%);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.big-pop-up-right {
+    padding: 10px;
+    background: white;
+    border-radius: 5px;
+}
+
+.big-pop-up-right-bottom {
+    background: rgba(239, 243, 244, 1);
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.text-small {
+    font: var(--font-small)
+}

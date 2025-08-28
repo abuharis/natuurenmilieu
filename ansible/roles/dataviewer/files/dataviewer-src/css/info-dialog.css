@@ -1,0 +1,21 @@
+.info-dialog-content{
+    padding: 1rem;
+    align-content: center;
+}
+
+.info-dialog-disclamer{
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.info-dialog-disclamer-text {
+    font-style: italic;
+}
+
+.info-dialog-heading{
+    color: var(--default-text-color);
+    font: var(--font-large);
+    padding-bottom: 1rem;
+    line-height: var(--line-height-large);
+    text-align: center;
+}

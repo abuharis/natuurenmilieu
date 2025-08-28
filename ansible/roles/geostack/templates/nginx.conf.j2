@@ -2,15 +2,38 @@ server {
   listen 80 default_server;
   server_name _;
 
-  location / {
-    proxy_pass http://geoserver:8080/;
+# Proxy requests for GeoServer
+location /geoserver {
+    proxy_pass http://geoserver:8080/geoserver;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
-  }
+}
 
-  location /healthz {
+# Handle requests for dataviewer at /
+location / {
+    proxy_pass http://website:8090/;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    add_header x-cache-status $upstream_cache_status;
+    add_header cache-control "public, max-age=18000";
+
+    # enable caching
+    proxy_cache my_cache;
+    proxy_cache_valid 200 1h;
+    proxy_cache_bypass $http_cache_control;
+}
+
+# LetsEncrypt ACME challenge
+location /.well-known/acme-challenge/ {
+    root /var/www/certbot;
+}
+
+location /healthz {
     return 200 'ok';
     add_header Content-Type text/plain;
   }

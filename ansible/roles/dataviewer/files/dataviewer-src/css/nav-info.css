@@ -1,0 +1,8 @@
+.nav-info-icon {
+    background: var(--light-grey);
+    border-radius: var(--border-radius);
+}
+
+.nav-info-icon.active {
+    background: var(--item-selected);
+}

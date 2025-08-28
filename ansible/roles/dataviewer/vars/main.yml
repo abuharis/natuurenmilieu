@@ -1,0 +1,3 @@
+---
+website_src_path: "/opt/geoserver-website-src"  # local path on server
+website_image_name: "geoserver-website:latest"

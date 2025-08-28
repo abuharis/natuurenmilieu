@@ -1,0 +1,162 @@
+.leaflet-control-layers-group-name {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 21.79px;
+    border: 1px solid #dcdcdc;
+    border-radius: 20px;
+    padding: 7px;
+    margin: 10px 0px;
+    color: var(--default-text-color);
+    background: rgba(255, 255, 255, 1);
+}
+
+.leaflet-control-layers-group {
+    margin-bottom: .5em;
+}
+
+.leaflet-control-layers-group > label > button > span {
+    color: rgba(0, 118, 99, 1);;
+}
+
+.leaflet-control-layers-group > label > button:hover {
+    background:  #eff3f4;
+}
+
+.leaflet-control-layers-group > label:not(:first-child) {
+    display: none;
+}
+
+.leaflet-control-layers-group.show-elements > label:first-child button{
+    background: #eff3f4;
+}
+
+.leaflet-control-layers-group.show-elements > label:not(:first-child) {
+    display: inline-block;
+    border: 1px solid #dcdcdc;
+    border-radius: 20px;
+    padding: 7px;
+    margin: 5px 5px 5px 0px;
+    width: fit-content;
+    color: var(--default-text-color);
+}
+
+.leaflet-control-layers-base{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+.leaflet-control-layers-base > label.active:hover {
+    background: rgba(253, 212, 71, 1);
+  }
+
+.leaflet-control-layers-base > label.active {
+    background: rgba(253, 212, 71, 1);
+}
+
+.leaflet-control-layers-group > label.active:not(:first-child):hover {
+    background: rgba(253, 212, 71, 1);
+}
+
+.leaflet-control-layers-group > label:not(:first-child):hover {
+    background: rgba(239, 243, 244, 1);
+}
+
+.active {
+    background: rgba(253, 212, 71, 1);
+}
+
+.leaflet-control-layers-scrollbar {
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-left: 10px;
+}
+
+.leaflet-control-layers-heading {
+    margin: 10px 5px;
+}
+
+.leaflet-control-layers-separator {
+    margin: 10px 2px 10px 5px;
+}
+
+.leaflet-control-layers-base label {
+    border: 1px solid #dcdcdc;
+    border-radius: 20px;
+    padding: 7px;
+    margin: 5px 5px 5px 0px;
+    width: fit-content;
+    color:var(--default-text-color);
+}
+
+.leaflet-control-layers-base label {
+    background: rgba(255, 255, 255, 1);
+}
+
+.leaflet-control-layers-base label:hover {
+    background: rgba(239, 243, 244, 1);
+}
+
+.leaflet-control-layers-base label.active input:checked {
+    background: rgba(253, 212, 71, 1);
+}
+
+.leaflet-control-layers-base label & input:checked {
+    background: rgba(253, 212, 71, 1);
+}
+
+.subgroup-open:after {
+    content: ' \2715';
+}
+
+.groupName-details {
+    font-family: 'Helvetica Neue';
+    font-size: 14px;
+    color: white;
+    padding: 10px;
+    background: rgba(25, 155, 185, 1);
+    border-radius: 10px;
+    position: absolute;
+    max-width: 250px;
+    width: fit-content;
+    transform: translateY(-30%) ;
+}
+
+.groupName-details-tip {
+    height: -5px;
+    position: relative;
+    border-right: 10px solid rgba(25, 155, 185, 1);
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.layers-close {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: 313px;
+    top: 67px;
+}
+
+.layers-icon {
+    width: 24px;
+    width: 26.33px;
+}
+
+.layers-button {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius);
+    border: var(--item-border);
+    background: var(--light-grey);
+}
+
+.layers-button.active {
+    background: var(--item-selected);
+}

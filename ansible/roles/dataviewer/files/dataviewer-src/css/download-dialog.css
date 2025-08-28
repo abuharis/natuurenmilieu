@@ -1,0 +1,44 @@
+.download-dialog-button {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius);
+    border: var(--item-border);
+    background: var(--light-grey);
+}
+
+.download-dialog {
+    position: absolute;
+    top: 56px;
+    left: -170px;
+    width: calc(350px - (8px* 2));
+    background: #FFFFFF;
+    border-radius: var(--border-radius);
+    padding: 8px;
+    display: block;
+    z-index: 1000;
+    overflow-x: hidden;
+    overflow-y: auto; 
+    max-height: 80vh;
+}
+
+.download-dialog-close {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: 313px;
+    top: 13px;
+}
+
+.download-options {
+    padding-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.icon-selected {
+    background: var(--item-selected);
+}

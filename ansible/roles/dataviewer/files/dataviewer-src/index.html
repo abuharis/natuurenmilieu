@@ -1,0 +1,801 @@
+<!DOCTYPE html -->
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Watermonsters Natuur&Milieu</title>
+    <!--Load the style stylesheet of leaflet -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
+      integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+      crossorigin=""
+    />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"
+    />
+    <link rel="stylesheet" href="css/global-variables.css" />
+    <link rel="stylesheet" href="css/leaflet.css" />
+    <link rel="stylesheet" href="css/leaflet-search.css" />
+    <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css" />
+    <link rel="stylesheet" href="css/L.Control.HtmlLegend.css" />
+    <link rel="stylesheet" href="css/leaflet-panel-layers.css" />
+    <link rel="stylesheet" href="css/leaflet.groupedlayercontrol.css" />
+    <link rel="stylesheet" href="css/leaflet.extra-markers.min.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/overlay-dialog.css" />
+    <link rel="stylesheet" href="css/info-dialog.css" />
+    <link rel="stylesheet" href="css/nav-info.css" />
+    <link rel="stylesheet" href="css/download-dialog.css" />
+    <link rel="stylesheet" href="css/more-info.css" />
+    <link rel="stylesheet" href="css/tabbed-popup.css">
+
+    <!--Load leaflet -->
+    <script
+      src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
+      integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+      crossorigin=""
+    ></script>
+    <!--Load ajax jquery ofzo -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!--Load wmts script -->
+    <script src="https://rawgithub.com/mylen/leaflet.TileLayer.WMTS/master/leaflet-tilelayer-wmts.js"></script>
+    <!--Load slider -->
+    <script src="https://cdn.jsdelivr.net/gh/Falke-Design/LeafletSlider@latest/dist/leaflet.SliderControl.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    <script src="https://github.com/kartoza/leaflet-wms-legend/blob/master/leaflet.wmslegend.js"></script>
+    <script src="js/qgis2web_expressions.js"></script>
+    <script src="js/leaflet.js"></script>
+    <script src="js/leaflet-svg-shape-markers.min.js"></script>
+    <script src="js/leaflet.rotatedMarker.js"></script>
+    <script src="js/leaflet.pattern.js"></script>
+    <script src="js/leaflet-hash.js"></script>
+    <script src="js/Autolinker.min.js"></script>
+    <script src="js/rbush.min.js"></script>
+    <script src="js/labelgun.min.js"></script>
+
+    <script src='js/global-texts.js'></script>
+    <script src="js/labels.js"></script>
+    <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+    <script src="js/leaflet-measure.js"></script>
+    <script src="js/leaflet-search.js"></script>
+    <script src="js/L.Control.HtmlLegend.js"></script>
+    <script src='js/leaflet-button-control.js'></script>
+    <script src="js/leaflet-panel-layers.js"></script>
+    <script src="js/leaflet.groupedlayercontrol.js"></script>
+    <script src="js/leaflet.extra-markers.min.js"></script>
+    <script src="js/nav-utils.js"></script>
+    <script src='js/popup.js'></script>
+    <script src='js/tabbed-popup.js'></script>
+    <script src='js/info-dialog.js'></script>
+    <script src='js/dialog-overlay.js'></script>
+    <script src='js/geo-server-api.js'></script>
+    <script src='js/download-dialog.js'></script>
+
+  </head>
+  <body>
+    <!--Create our map object -->
+    <div id="map" class="map"></div>
+
+    <script>
+      const waterMonstersTitle = 'Burgerwetenschap metingen';
+      // Find our map id
+      const map = L.map('map', { zoomControl: false });
+      // zoom control position
+      L.control.zoom({ position: 'bottomright' }).addTo(map);
+      // Set open openstreetmap
+      const googlestreet = L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+      ).addTo(map);
+      const autolinker = new Autolinker({
+        truncate: { length: 30, location: 'smart' },
+      });
+      // Set esriSatellite
+      const esriSatellite = L.tileLayer(
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+      ).addTo(map);
+
+      // Creates a red marker with the coffee icon
+      //var redMarker = L.ExtraMarkers.icon({
+      // icon: 'fa-spinner',
+      // markerColor: 'red',
+      //  shape: 'circle',
+      //  prefix: 'fa'
+      // });
+
+      //L.marker([51.941196,4.512291], {icon: redMarker}).addTo(map);
+      
+      ///Geoserver Web Feature Service
+      //---BMA---\\
+      features.bma.forEach((feature) => geoServer.getFeature(feature, 'handleBMALayer'));
+
+      //---WM---\\
+      features.waterMonsters.forEach((feature) =>geoServer.getFeature(feature, 'handleWaterMonstersLayer'));
+
+      //---KRW---\\
+      features.krw.forEach((feature) => geoServer.getFeature(feature, 'handleKRWLayer'));
+
+      //---ntot_2021---\\
+      features.stikstof.forEach((feature) => geoServer.getFeature(feature, 'handleStikstofLayer'));
+
+      //---ptot_2021---\\
+      features.fosfor.forEach((feature) => geoServer.getFeature(feature, 'handleFosforLayer'));
+
+    // triangle icons for map markers in Bestrijdingsmiddelen group
+    function getIcon(icon){
+        return L.icon({
+            iconUrl: `img/bma_${icon}.png`,
+            iconSize: [15, 15],
+        });
+    }
+
+    function getMapMarkersColor(groupName, color, latlng) {
+        switch (groupName) {
+            case globalText.pesticides:
+                switch (color) {
+                    case 'licht blauw': 
+                        return L.marker(latlng, {
+                            icon: getIcon('verondersteld schoon'),
+                        });
+                    case 'groen':
+                        return L.marker(latlng, {
+                            icon: getIcon('gering'),
+                        });
+                    case 'blauw':
+                        return L.marker(latlng, {
+                            icon: getIcon('geen'),
+                        });
+                    case 'oranje':
+                        return L.marker(latlng, {
+                            icon: getIcon('hoog'),
+                        });
+                    case 'rood':
+                        return L.marker(latlng, {
+                            icon: getIcon('zeer hoog'),
+                        });
+                    case 'geel':
+                        return L.marker(latlng, {
+                            icon: getIcon('matig'),
+                        });
+                    case 'grijs':
+                        return L.marker(latlng, {
+                            icon: getIcon('data niet toereikend'),
+                        });
+                }
+            break;
+            case waterMonstersTitle:
+                switch (color) {
+                    case 'goed': return '#23C3A9';
+                    case 'slecht': return '#FD4242';
+                    case 'matig': return '#FDD447';
+                    case 'N/A': return '#C8C8C8';
+                }
+            break;
+            case 'Waterkwaliteit KRW':
+                switch (color) {
+                    case 'Voldoet': return { color: '#008000', fillOpacity: 0.6 };
+                    case 'Voldoet niet': return { color: '#ff0000', fillOpacity: 0.6 };
+                    case 'null': return { color: 'grey', fillOpacity: 0.6 };
+                }
+            break;
+            case 'Stikstof':
+                switch (color) {
+                    case '0 - 100': return { color: '#ffffc3', fillOpacity: 0.6 };
+                    case '100 - 200': return { color: '#fff19e', fillOpacity: 0.6 };
+                    case '200 - 300': return { color: '#ffe37f', fillOpacity: 0.6 };
+                    case '300 - 400': return { color: '#ffd460', fillOpacity: 0.6 };
+                    case '400 - 500': return { color: '#ffc43e', fillOpacity: 0.6 };
+                    case '500 >': return { color: '#ffb400', fillOpacity: 0.6 };
+                    case '#N/A': return { color: '#c98e00', fillOpacity: 0.6 };
+                }
+            break;
+            case 'Fosfor':
+                switch (color) {
+                    case '0 - 10': return { color: '#ffffc3', fillOpacity: 0.6 };
+                    case '10 - 20': return { color: '#fff19e' };
+                    case '20 - 30': return { color: '#ffe37f' };
+                    case '30 - 40': return { color: '#ffd460' };
+                    case '40 - 50': return { color: '#ffc43e' };
+                    case '50 >': return { color: '#ffb400' };
+                    case '#N/A': return { color: '#c98e00' };
+                }
+            break
+        }
+    }
+
+    function addLegendElement(elements) {
+        return elements.map((element) => {
+            return {
+                label: element.label,
+                html: '',
+                style: {
+                    'background-color': element.color,
+                    'border-radius': '50%',
+                    width: '10px',
+                    height: '10px',
+                },
+            };
+        });
+    }
+
+    function showLegend (groupName) {
+        switch(groupName) {
+            case globalText.pesticides:
+                return addLegendElement([
+                    { label: 'Verondersteld schoon', color: '#007663' },
+                    { label: 'Geen', color: '#23C3A9' },
+                    { label: 'Gering', color: '#FDD447' },
+                    { label: 'Matig', color: '#FD9742' },
+                    { label: 'Hoog', color: '#FD4242' },
+                    { label: 'Zeer hoog', color: '#A82C2C' },
+                    { label: 'Data niet toereikend', color: '#c8c8c8' },
+                ])
+            case waterMonstersTitle:
+                return addLegendElement([
+                    { label: 'Goed', color: '#23C3A9' },
+                    { label: 'Matig', color: '#FDD447' },
+                    { label: 'Slecht', color: '#FD4242' },
+                    { label: 'Incomplete', color: '#C8C8C8' }
+                ])
+            case 'Waterkwaliteit KRW':
+                return addLegendElement([
+                    { label: 'Voldoet', color: '#008000' },
+                    { label: 'Voldoet niet', color: '#ff0000' },
+                    { label: 'Data niet toereikend', color: 'grey' },
+                ])
+            case 'Stikstof':
+                return addLegendElement([
+                    { label: '0 - 100', color: '#ffffc3' },
+                    { label: '100 - 200', color: '#fff19e' },
+                    { label: '200 - 300', color: '#ffe37f' },
+                    { label: '300 - 400', color: '#ffd460' },
+                    { label: '400 - 500', color: '#ffc43e' },
+                    { label: '500>', color: '#ffb400' },
+                    { label: 'Data niet toereikend', color: '#c98e00' },
+                ])
+            case 'Fosfor':
+                return addLegendElement([
+                    { label: '0 - 10', color: '#ffffc3' },
+                    { label: '10 - 20', color: '#fff19e' },
+                    { label: '20 - 30', color: '#ffe37f' },
+                    { label: '30 - 40', color: '#ffd460' },
+                    { label: '40 - 50', color: '#ffc43e' },
+                    { label: '50>', color: '#ffb400' },
+                    { label: 'Data niet toereikend', color: '#c98e00' },
+                ])
+        }
+    }
+
+    function onEachFeatureRenderer(feature, layer, body, title, moreInformationContent, properties){
+        const id = feature.id;
+        
+        layer.bindPopup(getPopupTemplate(id, title, body));
+        layer.on('popupopen', function () {
+          L.DomEvent.on(document.getElementById(id), 'click', (e) =>{
+            e.preventDefault();
+            openMoreInformation(
+              id,
+              title, 
+              moreInformationContent.leftFields,
+              moreInformationContent.rightFields,
+              moreInformationContent.additionalContent,
+              properties // Pass properties
+            );
+          })
+        })  
+      }
+
+    function onEachBMAFeature(feature, layer) {
+        const body = getBMABody(feature.properties);
+        const title = `${feature.properties.type_meting} meetpunt`;
+
+        // Calculate SNO-Waarde beforehand
+        const snoWaarde = feature.properties.type_meting === 'SNO' 
+                          ? feature.properties.klasse_omschrijving 
+                          : 'Not available yet';
+
+        const moreInformationContent = {
+          leftFields:[
+            ['Toxische druk', ``],
+            ['Acute toxische druk:', feature.properties.mspaf_acuut2],
+            ['Chronische toxische druk:', feature.properties.mspaf_chron],
+            ['Score:', feature.properties.kleur],
+            ['Wat is toxische druk?', `Toxische druk geeft hoeveel procent van het waterleven schade kan ondervinden door de aanwezigheid van bestrijdingsmiddelen. De score voor toxische druk ligt tussen de 0 en 1 (0 tot 100%). Bij een score van 0,05 gaat het dus om 5% van de organismen die worden beïnvloed. Acute druk gaat om kortdurende blootstelling aan hogere concentraties, chronische druk gaat om langetermijneffecten van lagere concentraties.`
+          ],
+            ['Toelichting op score:', 'Grijs = onvoldoende gegevens beschikbaar<br> \
+Blauw = zeer goede situatie<br> \
+Groen = gezonde waterkwaliteit<br> \
+Geel = matige toxische druk en gemiddeld soortenverlies<br> \
+Oranje = hoge toxische druk en gemiddeld soortenverlies<br> \
+Rood = zeer hoge toxische druk en hoogste graad van soortenverlies<br> '
+],
+        ],
+          rightFields: [
+            ['Som normoverschrijdingen', ''],
+            [
+              'SNO-Waarde',
+              snoWaarde // Use the calculated value here
+            ],
+            [
+              'Wat is SNO?', 
+              `De Som NormOverschrijdingen (SNO) geeft inzicht in hoeveel normoverschrijdingen er in een gebied plaatsvinden. Het getal vertelt hoeveel stoffen in een water op één meetmoment de norm hebben overschreden. De categorieën zijn 0, minder dan 10 stoffen, 10 tot 100, 100 tot 1000, en meer dan 1000.`
+            ],
+          ],             
+          additionalContent: {
+            title: 'Meer weten?', 
+            content: `Wil je meer weten over de individuele metingen, download de kaartlaag via de downloadknop, of bekijk de bronbestanden op de Bestrijdings-middelenatlas <a href="http://www.bestrijdingsmiddelenatlas.nl/" target="_blank">Link</a>`
+          }
+        }
+
+        return onEachFeatureRenderer(feature, layer, body, title, moreInformationContent)
+      }
+
+    function onEachWaterMonstersFeature(feature, layer) {
+        const body = getWaterMonstersBody(feature.properties);
+        const moreInformationContent = {
+          leftFields:[
+            ['Verdieping oordeel', ``],
+            ['Ecologische toestand: (EST)', feature.properties.eindoordeel_est],
+            ['Beschrijving EST:', 
+              `
+                Voor het opstellen van de Ecologische toestand is geprobeerd zoveel 
+                mogelijk aan te sluiten bij de KRW beoordeling, 
+                de ecosysteemtoestandsystematiek en de sleutelfactorensystematiek 
+                van de STOWA.
+                </br>
+                </br>
+                De KRW hanteert een beoordeling die afhankelijk is van watertype. 
+                De KRW watertypes zijn voor de EST geclusterd volgens 
+                ${popup.createLink('https://nioo.knaw.nl/files/2023-11/NIOO-KNAW-Rapportage-Vang-de-Watermonsters-2023.pdf')}.
+              `
+            ],
+          ],
+          rightFields: [
+            [
+              'Toelichting meting', 
+              `De ecologische toestand is gebaseerd op de volgende deelmaatlatten: 
+              helderheid en de bedekking van waterplanten. Voor het onderdeel waterplanten 
+              zijn voor 4 groepen planten (onderwaterplanten, kroos, 
+              drijvende planten en drijvende algen) door de burgerwetenschappers 
+              geschat welk percentage van het wateroppervlak ermee bedekt is. 
+              De burgerwetenschappers konden kiezen uit 5 categorieën voor elke groep planten: 
+              geen (0-1%), weinig (1-15%), duidelijk aanwezig (15-40%), plaatselijk veel (40-70%) 
+              en veel (70-100%). De helderheid is door burgerweten-schappers gemeten met behulp van 
+              een Secchi-schijf.`
+            ],
+          ],             
+          additionalContent: {
+            title: 'Meer weten?', 
+            content: `
+              Wil je meer weten over de individuele metingen, 
+              download de kaartlaag via de downloadknop, 
+              of bekijk de wetenschappelijke publicaties op: 
+              ${popup.createLink(
+                'https://nioo.knaw.nl/files/2023-11/NIOO-KNAW-Rapportage-Vang-de-Watermonsters-2023.pdf'
+              )}
+            `
+          }
+        }
+
+        return onEachFeatureRenderer(feature, layer, body, waterMonstersTitle, moreInformationContent)
+      }
+
+    function onEachKRWFeature(feature, layer) {
+        const body = getKRWBody(feature.properties);
+        const title = `KRW${feature.properties.rapportagejaar}`;
+        const moreInformationContent = {
+          leftFields:[
+            ['Verdieping oordeel', ``],
+            ['Oordeel algemeen fysisch chemische kwaliteit:', feature.properties.fysisch_chemisch_algemeen_oordeel],
+            ['Oordeel biologische kwaliteit:', feature.properties.biologie_totaal_oordeel],
+            ['Oordeel specifieke verontreinigde stoffen:', feature.properties.verontreinigende_stoffen_oordeel],
+            [
+              'Wat is de algemeen fysisch chemische kwaliteit van water?', 
+              `            
+                De fysisch-chemische kwaliteit is een onderdeel van de ecologische beoordeling van de KRW. 
+                De fysisch-chemische beoordeling is opgebouwd uit de beoordelingen van de parameters stikstof, 
+                fosfor, temperatuur, zuurstof, zuurgraad en chloride
+              `
+          ],
+          ],
+          rightFields: [
+            [
+              'Wat is de biologische kwaliteit van water?', 
+              `
+                De biologische kwaliteit is een onderdeel van de ecologische beoordeling van de KRW. 
+                De biologische beoordeling wordt bepaald aan de hand van vier kwaliteitselementen, voor algen,
+                 voor macrofauna, voor waterplanten en voor vis.`
+            ],
+            [
+              'Wat zijn specifieke verontreinigende stoffen?', 
+              `
+                Voor specifieke verontreinigende stoffen zijn nationale normen vastgesteld om 
+                de ecologische waterkwaliteit te ondersteunen. Per stroomgebied worden stoffen afgestemd
+                op de lokale situatie. De lijst wordt elke zes jaar herzien en aangepast indien nodig.
+               `
+            ],
+          ],             
+          additionalContent: {
+            title: 'Meer weten?', 
+            content: `
+              Wil je meer weten over de beoordeling van dit water, download de kaartlaag via de downloadknop, 
+              of bekijk de bronbestanden op het Waterkwaliteitsportaal 
+              ${popup.createLink('https://www.waterkwaliteitsportaal.nl/krw-bronbestanden')}
+            `
+          }
+        }
+
+        return onEachFeatureRenderer(feature, layer, body, title, moreInformationContent, feature.properties); // Pass properties
+      }
+      
+    function onEachgetEmissieregistratieFeature(feature, layer, type) {
+  const body = getEmissieregistratieBody(feature.properties);
+  const moreInformationContent = {
+    leftFields: [
+      ['Bronnen van vervuiling', ``],
+      ['', createTabSwitchLink('tab2')],
+      ['Toelichting cijfers', `Onder het tweede tabblad hierboven kunt u inzicht krijgen in emissie per sector. Dus aan welke sector is het grootste deel van de emissie naar oppervlaktewater in dit gebied toe te rekenen. </br></br>Voor de kaart zijn de gegevens uit de Emissieregistratie omgerekend naar milligram emissie per dag per vierkante meter water. Door deze vertaling is een beter beeld te krijgen van de daadwerkelijke impact op het water. Meer daarover vindt u in het verantwoordingsdocument. Dit is niet gedaan voor de cijfers per sector.`],
+    ],
+    rightFields: [
+      [
+        'Toelichting Emissieregistratie',
+        `
+          De hier getoonde cijfers komen van de Emissieregistratie. 
+          Wat zij daar zelf over zeggen is: "Emissiefactoren worden vastgesteld op basis 
+          van metingen, (modelmatige) berekeningen of uit de (internationale) literatuur." 
+          (Bron: ${popup.createLink('https://www.emissieregistratie.nl/over-emissieregistratie/dataverzameling/diffuse-bronnen')})
+        `,
+      ],
+    ],
+    additionalContent: {
+      title: 'Meer weten?',
+      content: `
+        Wil je meer weten over de bronnen van emissie, 
+        download de kaartlaag via de downloadknop, of bekijk de website 
+        van de Emissieregistratie zelf: 
+        ${popup.createLink('https://data.emissieregistratie.nl/emissies/grafiek')}
+      `,
+    },
+  };
+
+  layer.bindPopup(getPopupTemplate(feature.id, `${type} ${feature.properties?.jaar || 'Onbekend'}`, body));
+  layer.on('popupopen', function () {
+    L.DomEvent.on(document.getElementById(feature.id), 'click', (e) => {
+      e.preventDefault();
+      if (!feature.properties) {
+        return; // Silently handle the error case
+      }
+      openMoreInformation(
+        feature.id,
+        `Meer over ${type} ${feature.properties.jaar}`,
+        moreInformationContent.leftFields,
+        moreInformationContent.rightFields,
+        moreInformationContent.additionalContent,
+        feature.properties
+      );
+    });
+  });
+
+  layer.on({
+    add: function () {
+      layer.bringToBack();
+    },
+  });
+
+  return layer;
+}
+
+      //var water_nvt = L.icon({
+      ///   iconUrl: 'C:/Users/roy.vahstal/Pictures/water_grijs.png',
+      //  iconSize:     [25, 28], // size of the icon
+      //});
+
+
+      ///Build WFS layers
+      // the ajax callback function
+
+    
+
+    function handleBMALayer(data) {
+      const featureType = globalText.pesticides;
+      const year = data.features?.[0]?.properties.jaar;
+      bma = L.geoJson(data, {
+        pointToLayer: function (feature, latlng) {
+          return getMapMarkersColor(featureType, feature.properties.kleur, latlng)
+        },
+        onEachFeature: onEachBMAFeature
+      });
+
+      layerControl.addOverlay(bma, year, featureType);
+      map.fitBounds(bma.getBounds());
+      map.addControl(
+        L.control.htmllegend({
+          legends: [
+            {
+              name: `${featureType} (${year})`,
+              layer: bma,
+              elements: showLegend(featureType),
+            },
+          ],
+          collapseSimple: false,
+          detectStretched: false,
+          collapsedOnInit: true,
+          updateOpacity: 0.5,
+          defaultOpacity: 1.0,
+          visibleIcon: 'icon water_goed',
+          hiddenIcon: 'icon icon-eye-slash',
+        })
+      );
+    }
+
+    function handleWaterMonstersLayer(data) {
+        const year = data.features?.[0]?.properties.meetjaar;
+  
+        watermonsters = L.geoJson(data, {
+            pointToLayer: function (feature, latlng) {
+                return new L.CircleMarker(latlng, {
+                    radius: 5,
+                    fillOpacity: 1,
+                    color: 'black',
+                    fillColor: getMapMarkersColor(waterMonstersTitle, feature.properties.eindoordeel_est),
+                    weight: 1,
+                });
+            },
+            onEachFeature: onEachWaterMonstersFeature,
+        });
+        layerControl.addOverlay(watermonsters, year, waterMonstersTitle);
+        map.addControl(
+            L.control.htmllegend({
+                legends: [
+                    {
+                        name: `Overig Water (${year})`,
+                        layer: watermonsters,
+                        elements: showLegend(waterMonstersTitle),
+                    },
+                ],
+                collapseSimple: false,
+                detectStretched: false,
+                collapsedOnInit: true,
+                updateOpacity: 0.5,
+                defaultOpacity: 1.0,
+                visibleIcon: 'icon water_goed',
+                hiddenIcon: 'icon icon-eye-slash',
+            })
+        );
+    }
+
+    function handleKRWLayer(data) {
+      const year = data.features?.[0]?.id.substring(4,8);
+        Krw_2021 = L.geoJson(data, {
+            style: function (feature) {  
+                return getMapMarkersColor('Waterkwaliteit KRW', feature.properties.eindoordeel_oppervlaktewater_oordeel)
+            },
+            onEachFeature: onEachKRWFeature,
+        });
+        layerControl.addOverlay(Krw_2021, `KRW ${year}`, 'Waterkwaliteit KRW');
+        map.addControl(
+            L.control.htmllegend({
+                legends: [
+                    {
+                        name: `Waterkwaliteit KRW (${year})`,
+                        layer: Krw_2021,
+                        elements: showLegend('Waterkwaliteit KRW'),    
+                    },
+                ],
+                collapseSimple: false,
+                detectStretched: false,
+                collapsedOnInit: true,
+                updateOpacity: 0.5,
+                defaultOpacity: 1.0,
+                visibleIcon: 'icon water_goed',
+                hiddenIcon: 'icon icon-eye-slash',
+            })
+        );
+    }
+
+    function handleStikstofLayer(data) {
+        const type = 'Stikstof';
+        const year = data.features?.[0]?.properties.jaar;
+        ntot = L.geoJson(data, {
+            style: function (feature) {
+                return getMapMarkersColor(type, feature.properties.emissiemg_categorie)
+            },
+            onEachFeature: function(feature, layer) {
+                // Map fijnstof or pm10 fields
+                feature.properties = mapFijnstofFields(feature.properties);
+                onEachgetEmissieregistratieFeature(feature, layer, type);
+            }
+        });
+        layerControl.addOverlay(ntot, `${type}${year}`, 'Emissieregistratie Stikstof & Fosfor');
+        map.addControl(
+            L.control.htmllegend({
+                legends: [
+                    {
+                        name: `${type} (N-totaal) emissiecategorie`,
+                        layer: ntot,
+                        elements: showLegend(type),
+                    },
+                ],
+                collapseSimple: false,
+                detectStretched: false,
+                collapsedOnInit: true,
+                updateOpacity: 0.5,
+                defaultOpacity: 1.0,
+                visibleIcon: 'icon water_goed',
+                hiddenIcon: 'icon icon-eye-slash',
+            })
+        );
+    }
+
+    function handleFosforLayer(data) {
+                const type = 'Fosfor';
+        const year = data.features?.[0]?.properties.jaar;
+        ptot = L.geoJson(data, {
+            style: function (feature) {
+                return getMapMarkersColor(type, feature.properties.emissiemg_categorie)
+            },
+            onEachFeature: function(feature, layer) {
+                // Map fijnstof or pm10 fields
+                feature.properties = mapFijnstofFields(feature.properties);
+                onEachgetEmissieregistratieFeature(feature, layer, type);
+            }
+        });
+        layerControl.addOverlay(ptot, `${type}${year}`, 'Emissieregistratie Stikstof & Fosfor');
+        map.addControl(
+            L.control.htmllegend({
+                legends: [
+                    {
+                        name: `${type} (P-totaal) emissiecategorie`,
+                        layer: ptot,
+                        elements: showLegend(type), 
+                    },
+                ],
+                collapseSimple: false,
+                detectStretched: false,
+                collapsedOnInit: true,
+                updateOpacity: 0.5,
+                defaultOpacity: 1.0,
+                visibleIcon: 'icon water_goed',
+                hiddenIcon: 'icon icon-eye-slash',
+            })
+        );
+    }
+
+    function mapFijnstofFields(properties) {
+        // Return original properties since fijnstof/pm10 fields don't exist
+        return properties;
+    }
+
+    //Set our initial location and zoomlevel
+    map.setView([0, 0], 0);
+
+      //Create base-and WMS maps layers
+
+    const recreatiegebieden = L.tileLayer.wms(
+        geoServer.apiUrlWms,
+        {
+            layers: '	NatuurMilieu:Natuur- en recreatiegebieden',
+            transparent: 'true',
+            format: 'image/png',
+        }
+    );
+
+    map.addControl(
+        L.control.htmllegend({
+            legends: [
+                {
+                    name: globalText.recreationAreas,
+                    layer: recreatiegebieden,
+                    elements: addLegendElement([
+                        { label: 'Bosterrein', color: '#4F7942' },
+                        { label: 'Open natuurterrein (excl. bos)',color: '#8A9A5B',},
+                        { label: 'Sportterrein', color: '#EFD52A' },
+                        { label: 'Buitenwater', color: '#add8e6' },
+                        { label: 'Binnenwater', color: '#0076CE' },
+                        { label: 'Volkstuin', color: 'orange' },
+                        { label: 'Dagrecreatief terrein', color: '#C9A9A6' },
+                        { label: 'Verblijfsrecreatief terrein', color: '#9F2B68' },
+                    ]),
+                },
+            ],
+            collapseSimple: false,
+            detectStretched: false,
+            collapsedOnInit: true,
+            updateOpacity: 0.5,
+            defaultOpacity: 1.0,
+            visibleIcon: 'icon water_goed',
+            hiddenIcon: 'icon icon-eye-slash',
+        })
+    );
+
+    const natura2000 = L.tileLayer.wms(
+      geoServer.apiUrlWms,
+      {
+        layers: 'NatuurMilieu:Natura2000',
+        transparent: 'true',
+        format: 'image/png',
+      }
+    );
+
+    map.addControl(
+        L.control.htmllegend({
+            legends: [
+                {
+                    name: 'Natura2000 gebieden',
+                    layer: natura2000,
+                    elements: addLegendElement([
+                        { label: 'Habitatrichtlijn', color: '#EFD52A' },
+                        { label: 'Vogelrichtlijn', color: '#add8e6' },
+                        { label: 'Habitat- & Vogelrichtlijn', color: '#d7fd63' },
+                        { label: 'HR groeve', color: 'white' },
+                    ]),
+                },
+            ],
+          collapseSimple: false,
+          detectStretched: false,
+          collapsedOnInit: true,
+          updateOpacity: 0.5,
+          defaultOpacity: 1.0,
+          visibleIcon: 'icon water_goed',
+          hiddenIcon: 'icon icon-eye-slash',
+        })
+    );
+
+    const LGN2023 = L.tileLayer.wms(
+      geoServer.apiUrlWms,
+      {
+        layers: 'NatuurMilieu:LGN2023',
+        transparent: 'true',
+        format: 'image/tiff',
+      }
+    );
+
+    const baseMaps = {
+      OpenStreetMap: googlestreet,
+      'Esri Satellite': esriSatellite,
+    };
+
+    const overlayMaps = {
+        // "<div id='my-div-id'><img src='water.png' />
+        Basiskaarten: {
+          Recreatiegebieden: recreatiegebieden,
+          'Natura2000 gebieden': natura2000,
+        //   LGN2023: LGN2023, // data not available yet
+        },
+      };
+
+    const layerControl = L.control
+      .groupedLayers( baseMaps, overlayMaps, { position: 'topleft', toggleBy: groupedLayersToggleByclick })
+      .addTo(map);
+
+    map.addControl(layerControl);      
+
+    //Info button
+    const infoButton = new L.Control.Button(infoDialog.options).addTo(map);
+
+    // Search button
+    const osmGeocoder = new L.Control
+      .Geocoder({
+        collapsed: true,
+        position: 'topleft',
+        text: 'Search',
+        title: 'Search',
+        expand: 'click',
+        placeholder: 'Typ hier...'
+      })
+      .addTo(map);
+
+    // Download button
+    new L.Control.Button(downloadDialog.options).addTo(map);
+
+    const panel = L.control.panelLayers();
+
+      //Build up legend
+
+      //Get color for Index
+
+    </script>
+  </body>
+</html>
