@@ -1,0 +1,6 @@
+---
+- name: Deploy GeoStack
+  hosts: geostack
+  become: true
+  roles:
+    - geostack

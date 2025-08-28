@@ -2,8 +2,8 @@ name: Deploy GeoStack
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [ "devel" ]
+  push:
+    branches: [ "devel" ]
 
 jobs:
   deploy:
@@ -49,4 +49,4 @@ jobs:
             sudo chown -R $(whoami):$(whoami) /opt/ssl
 
       - name: GeoStack Playbook Executions
-        run: ansible-playbook -i ansible/inventory/hosts ansible/site.yml
+        run: ansible-playbook -i ansible/inventory/hosts ansible/nginx-test.yml
