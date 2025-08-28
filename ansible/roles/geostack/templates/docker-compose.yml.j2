@@ -1,6 +1,7 @@
 version: "3.9"
 services:
   postgis:
+    container_name: postgis
     image: {{ postgis_image }}
     restart: unless-stopped
     environment:
@@ -17,6 +18,7 @@ services:
     networks: [{{ geonet }}]
 
   geoserver:
+    container_name: geoserver
     image: {{ geoserver_image }}
     restart: unless-stopped
     depends_on:
@@ -32,6 +34,7 @@ services:
     networks: [{{ geonet }}]
 
   nginx:
+    container_name: nginx
     image: {{ nginx_image }}
     restart: unless-stopped
     depends_on: [geoserver]
