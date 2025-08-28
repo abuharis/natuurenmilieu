@@ -23,7 +23,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.DEPLOY_HOST }} << 'EOF'
             echo "Stopping and removing all containers..."
-            docker compose -f /opt/your-compose-folder/docker-compose.yml down -v
+            docker compose -f /opt/geostack/docker-compose.yml down -v
 
             echo "Removing leftover volumes..."
             docker volume prune -f
