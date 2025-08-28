@@ -41,5 +41,5 @@ jobs:
           EOF
           cat ansible/inventory/hosts
 
-      - name: Run ping playbook
+      - name: GeoStack Playbook Executions
         run: ansible-playbook -i ansible/inventory/hosts ansible/site.yml

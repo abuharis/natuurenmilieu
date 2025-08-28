@@ -15,29 +15,40 @@ services:
       - geonet
 
   geoserver:
-    image: osgeo/geoserver:2.24.2
+    image: {{ geoserver_image }}
     container_name: geoserver
     restart: unless-stopped
+    depends_on:
+      postgis:
+        condition: service_healthy
+    environment:
+      GEOSERVER_ADMIN_USER: {{ geoserver_admin_user }}
+      GEOSERVER_ADMIN_PASSWORD: {{ geoserver_admin_password }}
     ports:
       - "8080:8080"
-    networks:
-      - geonet
+    volumes:
+      - ./geoserver_data:/var/lib/geoserver
+    networks: [{{ geonet }}]
 
   postgis:
-    image: postgis/postgis:15-3.3
+    image: {{ postgis_image }}
     container_name: postgis
     restart: unless-stopped
     environment:
-      POSTGRES_USER: geoserver
-      POSTGRES_PASSWORD: secret
-      POSTGRES_DB: geodb
-    ports:
-      - "5432:5432"
-    networks:
-      - geonet
+      POSTGRES_DB: {{ postgres_db }}
+      POSTGRES_USER: {{ postgres_user }}
+      POSTGRES_PASSWORD: {{ postgres_password }}
+    volumes:
+      - ./postgis_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U {{ postgres_user }} -d {{ postgres_db }}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [{{ geonet }}]
 
   nginx:
-    image: nginx:alpine
+    image: {{ nginx_image }}
     container_name: nginx
     restart: unless-stopped
     ports:
