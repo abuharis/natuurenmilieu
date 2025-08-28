@@ -1,24 +1,24 @@
+#server {
+#    listen 80;
+ #   server_name wok.water-op-de-kaa.src.surf-hosted.nl;
+#
+    # Redirect all traffic to HTTPS except for certbot challenge
+ #   location / {
+  #      return 301 https://$server_name$request_uri;
+   # }
+
+    #location /.well-known/acme-challenge/ {
+     #   root /var/www/certbot;
+    #}
+#}
+
+
 server {
     listen 80;
     server_name wok.water-op-de-kaa.src.surf-hosted.nl;
 
-    # Redirect all traffic to HTTPS except for certbot challenge
-    location / {
-        return 301 https://$server_name$request_uri;
-    }
-
-    location /.well-known/acme-challenge/ {
-        root /var/www/certbot;
-    }
-}
-
-
-server {
-    listen 443 ssl;
-    server_name wok.water-op-de-kaa.src.surf-hosted.nl;
-
-    ssl_certificate /etc/letsencrypt/live/wok.water-op-de-kaa.src.surf-hosted.nl/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/wok.water-op-de-kaa.src.surf-hosted.nl/privkey.pem;
+    #ssl_certificate /etc/letsencrypt/live/wok.water-op-de-kaa.src.surf-hosted.nl/fullchain.pem;
+    #ssl_certificate_key /etc/letsencrypt/live/wok.water-op-de-kaa.src.surf-hosted.nl/privkey.pem;
 
 
     # Proxy requests for GeoServer
