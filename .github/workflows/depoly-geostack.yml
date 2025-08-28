@@ -2,8 +2,8 @@ name: Deploy GeoStack
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [ "devel" ]
+  push:
+    branches: [ "devel" ]
 
 jobs:
   deploy:
