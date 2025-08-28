@@ -2,6 +2,8 @@ name: Deploy GeoStack (Ping only)
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ "devel" ]
 
 jobs:
   ping:
