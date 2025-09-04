@@ -23,12 +23,21 @@ server {
 
     # Proxy requests for GeoServer
     location /geoserver {
-        proxy_pass http://geoserver:8080/geoserver;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
+    proxy_pass http://geoserver:8080/geoserver;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header Forwarded "proto=https;host=$host";
+
+    proxy_redirect http:// https://;
+
+    # Fix form action rewriting if GeoServer still outputs http://
+    proxy_set_header Accept-Encoding "";
+    sub_filter 'http://wok.water-op-de-kaa.src.surf-hosted.nl/geoserver/j_spring_security_check' 'https://wok.water-op-de-kaa.src.surf-hosted.nl/geoserver/j_spring_security_check';
+    sub_filter_once off;
+}
 
     # Handle requests for dataviewer at /
     location / {
