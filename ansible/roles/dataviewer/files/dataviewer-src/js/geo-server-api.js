@@ -1,5 +1,7 @@
 const geoServer = (() => {
+    // Parameterizze this line with the domain name passed from the CICD pipeline.
     const apiUrl = `https://https://dataviewer.wateropdekaart.nioo.knaw.nl/geoserver/NatuurMilieu/`;
+
     const apiUrlOws = `${apiUrl}ows?`;
     const apiUrlWms = `${apiUrl}wms?`;
     const wfsService = {
