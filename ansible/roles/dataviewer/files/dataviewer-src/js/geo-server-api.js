@@ -1,5 +1,6 @@
 const geoServer = (() => {
-    const apiUrl = `https://geoserver-natuur-milieu.domains.leaf.cloud/geoserver/NatuurMilieu/`;
+    // Parameterizze this line with the domain name passed from the CICD pipeline.
+    const apiUrl = `https://wok.water-op-de-kaa.src.surf-hosted.nl/geoserver/NatuurMilieu/`; 
     const apiUrlOws = `${apiUrl}ows?`;
     const apiUrlWms = `${apiUrl}wms?`;
     const wfsService = {
