@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name wok.water-op-de-kaa.src.surf-hosted.nl;
+    server_name dataviewer.wateropdekaart.nioo.knaw.nl;
 
     # Redirect all traffic to HTTPS except for certbot challenge
     location / {
@@ -17,8 +17,8 @@ server {
     listen 443 ssl;
     server_name wok.water-op-de-kaa.src.surf-hosted.nl;
 
-    ssl_certificate /etc/letsencrypt/live/wok.water-op-de-kaa.src.surf-hosted.nl/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/wok.water-op-de-kaa.src.surf-hosted.nl/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/dataviewer.wateropdekaart.nioo.knaw.nl/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/dataviewer.wateropdekaart.nioo.knaw.nl/privkey.pem;
 
 
     # Proxy requests for GeoServer

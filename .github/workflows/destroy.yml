@@ -2,8 +2,8 @@ name: Destroy Deployment
 
 on:
   workflow_dispatch:  # Manually trigger from GitHub Actions, but only if the code is in the default (main/master) branch
-  push:
-    branches: [ "devel" ] 
+  # push:
+  #   branches: [ "devel" ] 
 
 jobs:
   destroy:
@@ -25,14 +25,11 @@ jobs:
             echo "Stopping and removing all containers..."
             docker compose -f /opt/geostack/docker-compose.yml down -v
 
-            echo "Removing leftover volumes..."
-            docker volume prune -f
+            # echo "Removing leftover volumes..."
+            # docker volume prune -f
 
-            echo "Cleaning SSL, DB backups, and other persistent directories..."
-            sudo rm -rf /opt/ssl/www/*
-            sudo rm -rf /opt/ssl/letsencrypt/*
-            sudo rm -rf /opt/db_backups/*
-            sudo rm -rf /op/* 
+            # echo "Cleaning SSL, DB backups, and other persistent directories..."
+            # sudo rm -rf /op/* 
 
             echo "All services destroyed and volumes cleaned."
           EOF

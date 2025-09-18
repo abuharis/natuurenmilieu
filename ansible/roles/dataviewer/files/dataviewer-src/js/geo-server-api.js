@@ -1,5 +1,5 @@
 const geoServer = (() => {
-    const apiUrl = `https://geoserver-natuur-milieu.domains.leaf.cloud/geoserver/NatuurMilieu/`;
+    const apiUrl = `https://https://dataviewer.wateropdekaart.nioo.knaw.nl/geoserver/NatuurMilieu/`;
     const apiUrlOws = `${apiUrl}ows?`;
     const apiUrlWms = `${apiUrl}wms?`;
     const wfsService = {
