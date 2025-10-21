@@ -11,6 +11,12 @@ jobs:
     environment: dev
     env:
       DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+      GEOSERVER_ADMIN_USER: ${{ secrets.GEOSERVER_ADMIN_USER }}
+      GEOSERVER_ADMIN_PASSWORD: ${{ secrets.GEOSERVER_ADMIN_PASSWORD }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      GEOSTACK_DOMAIN: ${{ secrets.GEOSTACK_DOMAIN }}
     steps:
       - name: Checkout Infrastructure Repo
         uses: actions/checkout@v4
