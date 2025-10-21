@@ -1,0 +1,14 @@
+---
+- name: "Build custom GeoServer image locally"
+  community.docker.docker_image:
+    name: geoserver
+    tag: latest
+    source: build
+    build:
+      path: "{{ role_path }}/files"
+      dockerfile: Dockerfile
+  register: geoserver_build
+
+- name: "Display build result"
+  debug:
+    var: geoserver_build

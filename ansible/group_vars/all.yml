@@ -1,0 +1,3 @@
+---
+geostack_domain: "dataviewer.wateropdekaart.nioo.knaw.nl"
+geostack_geoserver_url: "https://{{ geostack_domain }}/geoserver/"

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server port="-1" shutdown="SHUTDOWN">
+  <Listener className="org.apache.catalina.startup.VersionLoggerListener"/>
+  <Listener className="org.apache.catalina.core.AprLifecycleListener"/>
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener"/>
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener"/>
+
+  <GlobalNamingResources>
+    <Resource name="UserDatabase" auth="Container" type="org.apache.catalina.UserDatabase"
+              description="User database that can be updated and saved"
+              factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+              pathname="conf/tomcat-users.xml"/>
+  </GlobalNamingResources>
+
+  <Service name="Catalina">
+
+    <!-- GeoServer runs on Tomcat behind NGINX HTTPS proxy -->
+    <Connector
+        port="8080"
+        protocol="HTTP/1.1"
+        connectionTimeout="20000"
+        redirectPort="8443"
+        maxParameterCount="1000"
+        scheme="https"
+        secure="true"
+        proxyName="dataviewer.wateropdekaart.nioo.knaw.nl"
+        proxyPort="443"
+    />
+
+    <Engine name="Catalina" defaultHost="localhost">
+
+      <!-- Trust X-Forwarded-* headers from NGINX -->
+      <Valve className="org.apache.catalina.valves.RemoteIpValve"
+             remoteIpHeader="x-forwarded-for"
+             proxiesHeader="x-forwarded-by"
+             protocolHeader="x-forwarded-proto"
+             protocolHeaderHttpsValue="https"
+             portHeader="x-forwarded-port"
+             requestAttributesEnabled="true" />
+
+      <Realm className="org.apache.catalina.realm.LockOutRealm">
+        <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+               resourceName="UserDatabase"/>
+      </Realm>
+
+      <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
+        <Valve className="org.apache.catalina.valves.AccessLogValve"
+               directory="logs"
+               prefix="localhost_access_log"
+               suffix=".txt"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b"/>
+      </Host>
+
+    </Engine>
+  </Service>
+</Server>

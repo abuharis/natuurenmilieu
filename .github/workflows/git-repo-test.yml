@@ -1,0 +1,46 @@
+name: Deploy GeoStack
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "devel" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+    env:
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+    steps:
+      - name: Checkout Infrastructure Repo
+        uses: actions/checkout@v4
+
+      - name: Checkout static site
+        uses: actions/checkout@v4
+        with:
+          repository: wolsk1/data-viewer
+          token: ${{ secrets.DATA_VIEWER_REPO_TOKEN }}
+          path: dataviewer-src
+
+      - name: Debug Environment Variables
+        run: | 
+          ls -la ./
+
+      - name: Copy static site into Ansible role
+        run: |
+          rm -rf ansible/roles/dataviewer/files/dataviewer-src
+          cp -r dataviewer-src ansible/roles/dataviewer/files/
+
+      - name: Debug Environment Variables
+        run: |
+          echo "GEOSERVER_ADMIN_USER: $GEOSERVER_ADMIN_USER"
+          echo "GEOSERVER_ADMIN_PASSWORD: $GEOSERVER_ADMIN_PASSWORD"
+          echo "POSTGRES_USER: $POSTGRES_USER"
+          echo "POSTGRES_PASSWORD: $POSTGRES_PASSWORD"
+          echo "POSTGRES_DB: $POSTGRES_DB"
+          echo "GEOSTACK_DOMAIN: $GEOSTACK_DOMAIN"
+
+      - name: Debug Environment Variables
+        run: | 
+          ls -la ansible/roles/dataviewer/files/
+          ls -la ansible/roles/dataviewer/files/dataviewer-src

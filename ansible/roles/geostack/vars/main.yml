@@ -2,13 +2,13 @@
 geostack_root: /opt/geostack
 geonet: geonet
 
-geoserver_image: kartoza/geoserver:latest
+geoserver_image: geoserver:latest
 postgis_image: postgis/postgis:16-3.4
 nginx_image: nginx:alpine
 
-geoserver_admin_user: admin
-geoserver_admin_password: changeme_admin
+geoserver_admin_user: "{{ geoserver_admin_user | default('admin') }}"
+geoserver_admin_password: "{{ geoserver_admin_password | default('changeme_admin') }}"
 
-postgres_user: geos
-postgres_password: changeme_pg
-postgres_db: geodata
+postgres_user: "{{ postgres_user | default('geos') }}"
+postgres_password: "{{ postgres_password | default('changeme_pg') }}"
+postgres_db: "{{ postgres_db | default('geodata') }}"

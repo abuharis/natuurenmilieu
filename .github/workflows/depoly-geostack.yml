@@ -12,8 +12,20 @@ jobs:
     env:
       DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
     steps:
-      - name: Checkout
+      - name: Checkout Infrastructure Repo
         uses: actions/checkout@v4
+
+      - name: Checkout static site
+        uses: actions/checkout@v4
+        with:
+          repository: wolsk1/data-viewer
+          token: ${{ secrets.DATA_VIEWER_REPO_TOKEN }}
+          path: dataviewer-src
+
+      - name: Copy static site into Ansible role
+        run: |
+          rm -rf ansible/roles/dataviewer/files/dataviewer-src
+          cp -r dataviewer-src ansible/roles/dataviewer/files/
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -49,4 +61,10 @@ jobs:
             sudo chown -R $(whoami):$(whoami) /opt/ssl
 
       - name: GeoStack Playbook Executions
-        run: ansible-playbook -i ansible/inventory/hosts ansible/site.yml
+        run: ansible-playbook -i ansible/inventory/hosts ansible/site.yml \
+            -e "geoserver_admin_user=$GEOSERVER_ADMIN_USER \
+                geoserver_admin_password=$GEOSERVER_ADMIN_PASSWORD \
+                postgres_user=$POSTGRES_USER \
+                postgres_password=$POSTGRES_PASSWORD \
+                postgres_db=$POSTGRES_DB
+                geostack_domain=$GEOSTACK_DOMAIN"
