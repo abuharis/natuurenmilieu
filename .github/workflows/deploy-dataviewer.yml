@@ -1,0 +1,89 @@
+name: Deploy Dataviewer
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          
+          # Add host to known_hosts to avoid prompt
+          # ssh-keyscan ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+      
+      - name: Deploy Changes
+        env:
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          GITHUB_TOKEN: ${{ secrets.DATA_VIEWER_REPO_TOKEN }}
+        run: |
+          ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$DEPLOY_HOST << 'EOF'
+          
+          set -e
+          echo "=== Starting deployment ==="
+          
+          # Navigate to source directory
+          cd /opt/dataviewer/dataviewer-src || {
+            echo "ERROR: Directory /opt/dataviewer/dataviewer-src not found"
+            exit 1
+          }
+          
+          echo "Current directory: $(pwd)"
+          echo "Current git status:"
+          git status --short
+          
+          # Use the token for git authentication
+          echo "Configuring git credentials..."
+          git config --global credential.helper 'store --file ~/.git-credentials'
+          echo "https://x-access-token:$GITHUB_TOKEN@github.com" > ~/.git-credentials
+          chmod 600 ~/.git-credentials
+          
+          # Pull latest changes
+          echo "Pulling latest changes from repository..."
+          git pull origin main
+          
+          # Show what changed
+          echo "Latest commit:"
+          git log --oneline -1
+          
+          # Restart nginx container
+          echo "Restarting nginx container..."
+          
+          # Check if docker is available
+          if ! command -v docker &> /dev/null; then
+            echo "ERROR: Docker not found on the server"
+            exit 1
+          fi
+          
+          # Restart nginx container
+          if sudo docker ps -a | grep -q nginx; then
+            echo "Found nginx container, restarting..."
+            sudo docker restart nginx
+            echo "Nginx container restarted"
+            
+            # Verify it's running
+            sleep 3
+            if sudo docker ps | grep -q nginx; then
+              echo "✓ Nginx container is running"
+            else
+              echo "⚠ Nginx container might have failed to start"
+              echo "Container status:"
+              sudo docker ps -a | grep nginx
+            fi
+          else
+            echo "ERROR: Nginx container not found"
+            echo "Available containers:"
+            sudo docker ps -a
+            exit 1
+          fi
+          
+          echo "=== Deployment completed successfully ==="
+          EOF
